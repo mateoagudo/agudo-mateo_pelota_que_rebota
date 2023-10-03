@@ -1,40 +1,50 @@
-let fondo, posX, posY, diam, rad, esp, margen, piso, velX;
+let pelota, pelota1;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  posX = windowWidth / 2;
-  posY = windowHeight * 0.2;
-  circulo = 255;
-  diam = random(10, 50);
-  rad = diam / 2;
   rectMode(CENTER);
-  esp = 50;
-  margen = 40;
-  velY = 10;
-  acel = 0.98;
-  piso = windowHeight - margen - esp / 2;
+  pelota = new Bounce(windowWidth / 2, windowHeight * 0.2);
+  pelota1 = new Bounce(windowWidth / 2, windowHeight * 0.2);
 }
 
 function draw() {
-  background(0, 200, 150, 70);
+  background(0, 200, 150);
 
-  update();
-
-  noStroke();
-  fill(circulo);
-  circle(posX, posY, diam);
-
-  fill(100, 50, 0);
-  rect(windowWidth / 2, windowHeight - margen, windowWidth, esp);
+  pelota.update();
+  pelota.display();
+  pelota1.update();
+  pelota1.display();
 }
 
-function update() {
-  velY += acel;
-  posY += velY;
+class Bounce {
+  constructor(_posX, _posY) {
+    this.posX = random(windowWidth * 0.1, windowWidth * 0.9);
+    this.posY = _posY;
+    this.velY = 10;
+    this.acel = 0.98;
+    this.diam = random(10, 50);
+    this.rad = this.diam / 2;
+    this.esp = 50;
+    this.margen = 40;
+    this.piso = windowHeight - this.margen - this.esp / 2;
+  }
+  update() {
+    this.velY += this.acel;
+    this.posY += this.velY;
 
-  if (posY >= piso - rad) {
-    print("se choco");
-    velY *= -1;
-    posY += velY;
+    if (this.posY >= this.piso - this.rad) {
+      print("se choco");
+      this.velY *= -1;
+      this.posY += this.velY;
+    }
+  }
+
+  display() {
+    noStroke();
+    fill(255);
+    circle(this.posX, this.posY, this.diam);
+
+    fill(100, 50, 0);
+    rect(windowWidth / 2, windowHeight - this.margen, windowWidth, this.esp);
   }
 }
